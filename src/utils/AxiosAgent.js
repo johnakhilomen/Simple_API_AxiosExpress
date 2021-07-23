@@ -6,22 +6,31 @@ class AxiosAgent {
     constructor(){}
 
     AxiosAgent = async (data, subUrl, method) => {
+        const token = "GGD9F9H9U0FM0UMUE9RUM08UGURM";
+        const headersConf = {
+            "Access-Control-Allow-Origin" : "*",
+            "Content-type": "Application/json",
+            "Authorization": `Bearer ${token}`
+        }; 
+        const axiosConfig = {
+            method: method,
+            data: data,
+            url: `${this._url}${subUrl}`,
+            timeout: 500,
+            headers: headersConf  
+        };
         try
         {
-            //axios.interceptors.request.use()
             if ( data == undefined )
             {
+                //Deconstructing axiosConfig and omitting both headers and timeout 
+                const {headers, timeout, ...rest} = axiosConfig;
+                console.log({...rest})
                 return await axios({
-                    method: method,
-                    url: `${this._url}${subUrl}`
+                   ...rest
                 }); 
             }
-            return await axios({
-                method: method,
-                data: data,
-                url: `${this._url}${subUrl}`,
-                timeout: 500 
-            })
+            return await axios(axiosConfig)
         }
         catch(err) {
             console.log(err.message)
